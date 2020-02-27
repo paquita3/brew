@@ -154,7 +154,7 @@
 !/.editorconfig
 !/.gitignore
 !/.yardopts
-!/.vale.ini
+!/.*.ini
 !/CHANGELOG.md
 !/CONTRIBUTING.md
 !/Dockerfile
