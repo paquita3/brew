@@ -6,5 +6,5 @@
 --exclude Library/Homebrew/vendor/
 --exclude Library/Homebrew/compat/
 Library/Homebrew/**/*.rb
--
+-tidy API doc
 *.md
