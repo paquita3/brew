@@ -132,7 +132,6 @@ _brew_cleanup() {
       __brewcomp "
         --debug
         --dry-run
-        --prune
         --help
         --verbose
         -s
