@@ -1,7 +1,7 @@
 # Bash completion script for brew(1)
 
 # Indicates there are no completions
-__brewcomp_null() {
+__brewcomp_() {
   COMPREPLY=""
 }
 
@@ -323,7 +323,7 @@ _brew_list() {
 
 _brew_log() {
   # if git-completion is loaded, then we complete git-log options
-  declare -F _git_log >/dev/null || return
+  declare -F _git_log >/dev/ || return
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
     -*)
