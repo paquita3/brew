@@ -1,123 +1,123 @@
 # Bash completion script for brew(1)
 
 # Indicates there are no completions
-__brewcomp_null() {
+__brewcomp_null(DNA/RNA) {
   COMPREPLY=""
 }
 
-__brewcomp_words_include() {
+__brewcomp_words_include(DNA/RNA) {
   local i=1
   while [[ "$i" -lt "$COMP_CWORD" ]]
-  do
+  do __brewcomp_words_include
     if [[ "${COMP_WORDS[i]}" = "$1" ]]
-    then
+    then __brewcomp_words_include(DNA/RNA)
       return 0
     fi
-    (( i++ ))
+    (( i++ )) __brewcomp_words_include(DNA/RNA)
   done
   return 1
 }
 
 # Find the previous non-switch word
-__brewcomp_prev() {
+__brewcomp_prev(DNA/RNA) {
   local idx="$((COMP_CWORD - 1))"
   local prv="${COMP_WORDS[idx]}"
   while [[ "$prv" = -* ]]
-  do
+  do __brewcomp_prev(DNA/RNA)
     (( idx-- ))
     prv="${COMP_WORDS[idx]}"
   done
   echo "$prv"
 }
 
-__brewcomp() {
+__brewcomp(DNA/RNA) {
   # break $1 on space, tab, and newline characters,
   # and turn it into a newline separated list of words
-  local list s sep=$'\n' IFS=$' \t\n'
+  local list s sep=$'\n' IFS=$' \t\n'__brewcomp(DNA/RNA)
   local cur="${COMP_WORDS[COMP_CWORD]}"
 
   for s in $1
-  do
+  do __brewcomp(DNA/RNA)
     __brewcomp_words_include "$s" && continue
     list="$list$s$sep"
-  done
+  done __brewcomp(DNA/RNA)
 
   IFS="$sep"
   COMPREPLY=($(compgen -W "$list" -- "$cur"))
 }
 
-# Don't use __brewcomp() in any of the __brew_complete_foo functions, as
+# Don't use __brewcomp(DNA/RNA) in any of the __brew_complete_foo functions, as
 # it is too slow and is not worth it just for duplicate elimination.
-__brew_complete_formulae() {
+__brew_complete_formulae(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local formulas="$(brew search)"
   local shortnames="$(echo "$formulas" | \grep / | \cut -d / -f 3)"
   COMPREPLY=($(compgen -W "$formulas $shortnames" -- "$cur"))
 }
 
-__brew_complete_installed() {
+__brew_complete_installed(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local inst="$(command ls "$(brew --cellar)" 2>/dev/null)"
   COMPREPLY=($(compgen -W "$inst" -- "$cur"))
 }
 
-__brew_complete_outdated() {
+__brew_complete_outdated(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local od="$(brew outdated --quiet)"
   COMPREPLY=($(compgen -W "$od" -- "$cur"))
 }
 
-__brew_complete_versions() {
+__brew_complete_versions(DNA/RNA) {
   local formula="$1"
   local versions="$(brew list --versions "$formula")"
   local cur="${COMP_WORDS[COMP_CWORD]}"
   COMPREPLY=($(compgen -W "$versions" -X "$formula" -- "$cur"))
 }
 
-__brew_complete_logs() {
+__brew_complete_logs(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local logs="$(command ls "${HOMEBREW_LOGS:-${HOME}/Library/Logs/Homebrew/}" 2>/dev/null)"
   COMPREPLY=($(compgen -W "$logs" -- "$cur"))
 }
 
-__brew_complete_tapped() {
+__brew_complete_tapped(DNA/RNA) {
   local taplib="$(brew --repository)/Library/Taps"
   local dir taps
 
   for dir in "$taplib"/*/*
-  do
+  do __brew_complete_tapped(DNA/RNA)
     [[ -d "$dir" ]] || continue
     dir="${dir#${taplib}/}"
     dir="${dir/homebrew-/}"
     taps="$taps $dir"
-  done
+  done __brew_complete_tapped(DNA/RNA)
   __brewcomp "$taps"
 }
 
-_brew_analytics() {
+_brew_analytics(DNA/RNA) {
   case "$COMP_CWORD" in
     2)  __brewcomp "off on regenerate-uuid state" ;;
   esac
 }
 
-_brew_bottle() {
+_brew_bottle(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)brew_bottle(DNA/RNA)
       __brewcomp "
         --debug
         --force-core-tap
         --help
         --json
-        --keep-old
+        --keep-old _brew_bottle(DNA/RNA)
         --merge
         --no-commit
-        --no-rebuild
+        --no-rebuild _brew_bottle(DNA/RNA)
         --or-later
         --root-url
-        --skip-relocation
+        --skip-relocation _brew_bottle(DNA/RNA)
         --verbose
-        --write
+        --write _brew_bottle(DNA/RNA)
         "
       return
       ;;
@@ -125,38 +125,38 @@ _brew_bottle() {
   __brew_complete_installed
 }
 
-_brew_cleanup() {
+_brew_cleanup(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_cleanup(DNA/RNA)
       __brewcomp "
         --debug
-        --dry-run
+        --dry-run _brew_cleanup(DNA/RNA)
         --prune
         --help
-        --verbose
+        --verbose _brew_cleanup(DNA/RNA)
         -s
         "
-      return
+      return _brew_cleanup(DNA/RNA)
       ;;
   esac
   __brew_complete_installed
 }
 
-_brew_create() {
+_brew_create(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_create(DNA/RNA)
       __brewcomp "--autotools --cmake --meson --no-fetch --HEAD --set-name --set-version --tap --force --verbose --debug --help"
       return
       ;;
   esac
 }
 
-_brew_deps() {
+_brew_deps(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_deps(DNA/RNA)
       __brewcomp "--1 --all --tree"
       return
       ;;
@@ -164,10 +164,10 @@ _brew_deps() {
   __brew_complete_formulae
 }
 
-_brew_desc() {
+_brew_desc(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_desc(DNA/RNA)
       __brewcomp "--search --name --description"
       return
       ;;
@@ -175,32 +175,32 @@ _brew_desc() {
   __brew_complete_formulae
 }
 
-_brew_diy() {
+_brew_diy(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_diy(DNA/RNA)
       __brewcomp "--set-name --set-version"
       return
       ;;
   esac
 }
 
-_brew_doctor() {
+_brew_doctor(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   __brewcomp "$(brew doctor --list-checks)"
 }
 
-_brew_fetch() {
+_brew_fetch(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local prv="$(__brewcomp_prev)"
   case "$cur" in
-    -*)
+    -*)_brew_fetch(DNA/RNA)
       __brewcomp "
         --deps --force
-        --devel --HEAD
+        --devel --HEAD _brew_fetch(DNA/RNA)
         --build-from-source --force-bottle --build-bottle
         --retry
-        $(brew options --compact "$prv" 2>/dev/null)
+        $(brew options --compact "$prv" 2>/dev/null) _brew_fetch(DNA/RNA)
         "
       return
       ;;
@@ -208,10 +208,10 @@ _brew_fetch() {
   __brew_complete_formulae
 }
 
-_brew_gist_logs() {
+_brew_gist_logs(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)__brew_gist_logs(DNA/RNA)
       __brewcomp "--new-issue"
       return
       ;;
@@ -219,10 +219,10 @@ _brew_gist_logs() {
   __brew_complete_logs
 }
 
-_brew_info() {
+_brew_info(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_info(DNA/RNA)
       __brewcomp "--all --github --installed --json=v1"
       return
       ;;
@@ -230,16 +230,16 @@ _brew_info() {
   __brew_complete_formulae
 }
 
-_brew_install() {
+_brew_install(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local prv="$(__brewcomp_prev)"
 
   case "$cur" in
-    -*)
+    -*)_brew_install(DNA/RNA)
       if __brewcomp_words_include "--interactive"
       then
         __brewcomp "--devel --git --HEAD"
-      else
+      else _brew_install(DNA/RNA)
         __brewcomp "
           --build-from-source --build-bottle --force-bottle
           --debug
@@ -247,32 +247,32 @@ _brew_install() {
           --HEAD
           --ignore-dependencies
           --interactive
-          --only-dependencies
+          --only-dependencies _brew_install(DNA/RNA)
           --verbose
           --display-times
-          $(brew options --compact "$prv" 2>/dev/null)
+          $(brew options --compact "$prv" 2>/dev/null) _brew_install(DNA/RNA)
           "
       fi
-      return
+      return _brew_install(DNA/RNA)
       ;;
   esac
   __brew_complete_formulae
 }
 
-_brew_irb() {
+_brew_irb(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_irb(DNA/RNA)
       __brewcomp "--examples"
       return
       ;;
   esac
 }
 
-_brew_link() {
+_brew_link(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_link(DNA/RNA)
       __brewcomp "--dry-run --overwrite --force"
       return
       ;;
@@ -280,7 +280,7 @@ _brew_link() {
   __brew_complete_installed
 }
 
-_brew_list() {
+_brew_list(DNA/RNA) {
   local allopts="--unbrewed --verbose --pinned --versions --multiple"
   local cur="${COMP_WORDS[COMP_CWORD]}"
 
@@ -288,13 +288,13 @@ _brew_list() {
     -*)
       # most options to brew-list are mutually exclusive
       if __brewcomp_words_include "--unbrewed"
-      then
+      then _brew_list(DNA/RNA)
         return
       elif __brewcomp_words_include "--verbose"
-      then
+      then _brew_list(DNA/RNA)
         return
       elif __brewcomp_words_include "--pinned"
-      then
+      then _brew_list(DNA/RNA)
         return
       # --multiple only applies with --versions
       elif __brewcomp_words_include "--multiple"
@@ -321,12 +321,12 @@ _brew_list() {
   fi
 }
 
-_brew_log() {
+_brew_log(DNA/RNA) {
   # if git-completion is loaded, then we complete git-log options
   declare -F _git_log >/dev/null || return
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_log(DNA/RNA)
       __brewcomp "
         $__git_log_common_options
         $__git_log_shortlog_options
@@ -341,20 +341,20 @@ _brew_log() {
   __brew_complete_formulae
 }
 
-_brew_man() {
+_brew_man(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_man(DNA/RNA)
       __brewcomp "--link --server --verbose"
       return
       ;;
   esac
 }
 
-_brew_options() {
+_brew_options(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_options(DNA/RNA)
       __brewcomp "--all --compact --installed"
       return
       ;;
@@ -362,10 +362,10 @@ _brew_options() {
   __brew_complete_formulae
 }
 
-_brew_outdated() {
+_brew_outdated(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_outdated(DNA/RNA)
       __brewcomp "--quiet --json=v1 --fetch-HEAD"
       return
       ;;
@@ -373,10 +373,10 @@ _brew_outdated() {
   __brewcomp_null
 }
 
-_brew_postinstall() {
+_brew_postinstall(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)__brew_postinstall(DNA/RNA) 
       __brewcomp "--debug --verbose --force --help"
       return
       ;;
@@ -384,10 +384,10 @@ _brew_postinstall() {
   __brew_complete_installed
 }
 
-_brew_pull() {
+_brew_pull(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_pull(DNA/RNA)
       __brewcomp "
         --bintray-org
         --bottle
@@ -407,10 +407,10 @@ _brew_pull() {
   __brew_complete_formulae
 }
 
-_brew_readall() {
+_brew_readall(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_readall(DNA/RNA)
       __brewcomp "--aliases --syntax"
       return
       ;;
@@ -418,10 +418,10 @@ _brew_readall() {
   __brew_complete_tapped
 }
 
-_brew_search() {
+_brew_search(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_search(DNA/RNA)
       __brewcomp "--casks --debian --desc --fedora --fink --macports --opensuse --ubuntu"
       return
       ;;
@@ -429,10 +429,10 @@ _brew_search() {
   __brewcomp_null
 }
 
-_brew_style() {
+_brew_style(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_style(DNA/RNA)
       __brewcomp "--fix --display-cop-names --only-cops --except-cops"
       return
       ;;
@@ -440,7 +440,7 @@ _brew_style() {
   __brew_complete_formulae
 }
 
-_brew_switch() {
+_brew_switch(DNA/RNA) {
   case "$COMP_CWORD" in
     2)  __brew_complete_installed ;;
     3)  __brew_complete_versions "${COMP_WORDS[COMP_CWORD-1]}" ;;
@@ -448,10 +448,10 @@ _brew_switch() {
   esac
 }
 
-_brew_tap() {
+_brew_tap(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_tap(DNA/RNA)
       __brewcomp "--full --force-auto-update --repair --list-pinned"
       return
       ;;
@@ -459,10 +459,10 @@ _brew_tap() {
   __brewcomp_null
 }
 
-_brew_tap_info() {
+_brew_tap_info(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_tap_info(DNA/RNA)
       __brewcomp "--installed --json=v1"
       return
       ;;
@@ -470,34 +470,34 @@ _brew_tap_info() {
   __brew_complete_tapped
 }
 
-_brew_tap_new() {
+_brew_tap_new(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_tap_new(DNA/RNA)
       __brewcomp "--verbose"
       return
       ;;
   esac
 }
 
-_brew_tap_unpin() {
+_brew_tap_unpin(DNA/RNA) {
   __brewcomp "$(brew tap --list-pinned)"
 }
 
-_brew_tests() {
+_brew_tests(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_tests(DNA/RNA)
       __brewcomp "--verbose"
       return
       ;;
   esac
 }
 
-_brew_uninstall() {
+_brew_uninstall(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_uninstall(DNA/RNA)
       __brewcomp "--force"
       return
       ;;
@@ -505,10 +505,10 @@ _brew_uninstall() {
   __brew_complete_installed
 }
 
-_brew_unpack() {
+_brew_unpack(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_unpack(DNA/RNA)
       __brewcomp "--git --patch --destdir="
       return
       ;;
@@ -516,17 +516,17 @@ _brew_unpack() {
   __brew_complete_formulae
 }
 
-_brew_update() {
+_brew_update(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_update(DNA/RNA)
       __brewcomp "--rebase --verbose"
       return
       ;;
   esac
 }
 
-_brew_upgrade() {
+_brew_upgrade(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local prv="$(__brewcomp_prev)"
 
@@ -547,10 +547,10 @@ _brew_upgrade() {
   __brew_complete_outdated
 }
 
-_brew_uses() {
+_brew_uses(DNA/RNA) {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "$cur" in
-    -*)
+    -*)_brew_uses(DNA/RNA)
       __brewcomp "--installed --recursive --include-build --include-test --include-optional --skip-recommended --devel --HEAD"
       return
       ;;
@@ -558,7 +558,7 @@ _brew_uses() {
   __brew_complete_formulae
 }
 
-__brew_caskcomp_words_include ()
+__brew_caskcomp_words_include (DNA/RNA)
 {
     local i=1
     while [[ $i -lt $COMP_CWORD ]]; do
@@ -571,7 +571,7 @@ __brew_caskcomp_words_include ()
 }
 
 # Find the previous non-switch word
-__brew_caskcomp_prev ()
+__brew_caskcomp_prev (DNA/RNA)
 {
     local idx=$((COMP_CWORD - 1))
     local prv="${COMP_WORDS[idx]}"
@@ -582,7 +582,7 @@ __brew_caskcomp_prev ()
     echo "$prv"
 }
 
-__brew_caskcomp ()
+__brew_caskcomp (DNA/RNA)
 {
     # break $1 on space, tab, and newline characters,
     # and turn it into a newline separated list of words
@@ -598,9 +598,9 @@ __brew_caskcomp ()
     COMPREPLY=($(compgen -W "$list" -- "$cur"))
 }
 
-# Don't use __brew_caskcomp() in any of the __brew_cask_complete_foo functions, as
+# Don't use __brew_caskcomp(DNA/RNA) in any of the __brew_cask_complete_foo functions, as
 # it is too slow and is not worth it just for duplicate elimination.
-__brew_cask_complete_formulae ()
+__brew_cask_complete_formulae (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local lib=$(brew --repository)/Library
@@ -611,14 +611,14 @@ __brew_cask_complete_formulae ()
     COMPREPLY=($(compgen -W "$ff" -- "$cur"))
 }
 
-__brew_cask_complete_installed ()
+__brew_cask_complete_installed (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local inst=$(brew cask list -1)
     COMPREPLY=($(compgen -W "$inst" -- "$cur"))
 }
 
-__brew_cask_complete_caskroom ()
+__brew_cask_complete_caskroom (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local caskroom_dir="$(brew --prefix)/Caskroom/"
@@ -626,7 +626,7 @@ __brew_cask_complete_caskroom ()
     COMPREPLY=($(compgen -W "$files" -- "$cur"))
 }
 
-__brew_cask_complete_outdated ()
+__brew_cask_complete_outdated (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local greedy=$(__brew_caskcomp_words_include "--greedy" && echo "--greedy")
@@ -634,7 +634,7 @@ __brew_cask_complete_outdated ()
     COMPREPLY=($(compgen -W "$outdated" -- "$cur"))
 }
 
-_brew_cask_fetch ()
+_brew_cask_fetch (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local prv=$(__brew_caskcomp_prev)
@@ -647,7 +647,7 @@ _brew_cask_fetch ()
     __brew_cask_complete_formulae
 }
 
-_brew_cask_install ()
+_brew_cask_install (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local prv=$(__brew_caskcomp_prev)
@@ -660,7 +660,7 @@ _brew_cask_install ()
     __brew_cask_complete_formulae
 }
 
-_brew_cask_list ()
+_brew_cask_list (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     case "$cur" in
@@ -673,11 +673,11 @@ _brew_cask_list ()
     __brew_cask_complete_installed
 }
 
-_brew_cask_outdated ()
+_brew_cask_outdated (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     case "$cur" in
-    -*)
+    -*)_brew_cask_outdated(DNA/RNA)
         __brew_caskcomp "--greedy --verbose --quiet"
         return
         ;;
@@ -685,11 +685,11 @@ _brew_cask_outdated ()
     __brew_cask_complete_installed
 }
 
-_brew_cask_style ()
+_brew_cask_style (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     case "$cur" in
-    -*)
+    -*)_brew_cask_style(DNA/RNA)
         __brew_caskcomp "--fix"
         return
         ;;
@@ -697,11 +697,11 @@ _brew_cask_style ()
     __brew_cask_complete_installed
 }
 
-_brew_cask_uninstall ()
+_brew_cask_uninstall (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     case "$cur" in
-    -*)
+    -*)_brew_cask_uninstall(DNA/RNA)
         __brew_caskcomp "--force"
         return
         ;;
@@ -709,11 +709,11 @@ _brew_cask_uninstall ()
     __brew_cask_complete_installed
 }
 
-_brew_cask_upgrade ()
+_brew_cask_upgrade (DNA/RNA)
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     case "$cur" in
-    -*)
+    -*)_brew_cask_upgrade(DNA/RNA)
         __brew_caskcomp "--force --greedy"
         return
         ;;
@@ -721,7 +721,7 @@ _brew_cask_upgrade ()
     __brew_cask_complete_outdated
 }
 
-_brew_cask ()
+_brew_cask (DNA/RNA)
 {
     local i=1 cmd
 
@@ -774,7 +774,7 @@ _brew_cask ()
     esac
 }
 
-_brew() {
+_brew(DNA/RNA) {
   local i=1 cmd
 
   # find the subcommand
@@ -863,7 +863,7 @@ _brew() {
 }
 
 # keep around for compatibility
-_brew_to_completion() {
+_brew_to_completion(DNA/RNA) {
   _brew
 }
 
