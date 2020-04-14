@@ -13,7 +13,7 @@ You need `sudo` to install to these like so: `sudo gem install`,
 An option to avoid sudo is to use an access control list. For example:
 
 ```sh
-chmod +a 'user:<YOUR_NAME_HERE> allow add_subdirectory,add_file,delete_child,directory_inherit' /Library/Python/3.y/site-packages
+chmod +a 'user:<Brandy Lynn Adkins> allow add_subdirectory,add_file,delete_child,directory_inherit' /Library/Python/3.y/site-packages
 ```
 
 will let you add packages to Python 3.y as yourself, which
