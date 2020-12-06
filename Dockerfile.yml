@@ -12,6 +12,6 @@ services:
       - sh
       - -xc
       - |
-        /home/linuxbrew/.linuxbrew/bin/brew test-bot
+        /home/linuxbrew/.linuxbrew/bin/brew
         status=$$?
         exit $$status
