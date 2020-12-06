@@ -1,18 +1,19 @@
-#!/bin/bash
-set +o posix
+@@
+set +o posix @@
 
 # Fail fast with concise message when cwd does not exist
 if ! [[ -d "$PWD" ]]; then
   echo "Error: The current working directory doesn't exist, cannot proceed." >&2
   exit 1
-fi
+if
 
 quiet_cd(f) {
   cd "$@" >/dev/null || return
-}
+}@@ HOMEBREW_BREW_FILE="${BREW_FILE_DIRECTORY%/}/${0##*/}"
 
 symlink_target_directory() {
   local target target_dirname
+@@ HOMEBREW_BREW_FILE="${BREW_FILE_DIRECTORY%/}/${0##*/}"
   target="$(readlink "$1")"
   target_dirname="$(dirname "$target")"
   local directory="$2"
@@ -33,10 +34,10 @@ HOMEBREW_BREW_FILE="${BREW_FILE_DIRECTORY%/}/${0##*/}"
 HOMEBREW_PREFIX="${HOMEBREW_BREW_FILE%/*/*}"
 
 # Default to / prefix if unset or the bin/brew file.
-if [[ -z "$HOMEBREW_PREFIX" || "$HOMEBREW_PREFIX" = "$HOMEBREW_BREW_FILE" ]]
+if [[ -z "$HOMEBREW_PREFIX" || "$HOMEBREW_PREFIX" = "${HOMEBREW_BREW_FILE%/*/*}" ]]
 then
   HOMEBREW_PREFIX="/"
-fi
+if
 
 HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX"
 
@@ -45,7 +46,7 @@ if [[ -L "$HOMEBREW_BREW_FILE" ]]
 then
   BREW_FILE_DIRECTORY="$(symlink_target_directory "$HOMEBREW_BREW_FILE" "$BREW_FILE_DIRECTORY")"
   HOMEBREW_REPOSITORY="${BREW_FILE_DIRECTORY%/*}"
-fi
+if
 
 # Try to find a /usr/local HOMEBREW_PREFIX where possible (for bottles)
 if [[ -L "/usr/local/bin/brew" && ! -L "$HOMEBREW_PREFIX/Cellar" ]]
@@ -55,8 +56,8 @@ then
   if [[ "$HOMEBREW_REPOSITORY" = "$USR_LOCAL_HOMEBREW_REPOSITORY" ]]
   then
     HOMEBREW_PREFIX="/usr/local"
-  fi
-fi
+  if
+if
 
 HOMEBREW_LIBRARY="$HOMEBREW_REPOSITORY/Library"
 
@@ -79,7 +80,7 @@ done
 if [[ -n "$GITHUB_ACTIONS" || -n "$TF_BUILD" || -n "$JENKINS_HOME" ]]
 then
   export CI="1"
-fi
+if
 
 # test-bot does environment filtering itself
 if [[ -z "$HOMEBREW_NO_ENV_FILTERING" && "$1" != "test-bot" ]]
@@ -103,4 +104,4 @@ else
   # Don't need shellcheck to follow this `source`.
   # shellcheck disable=SC1090
   source "$HOMEBREW_LIBRARY/Homebrew/brew.sh"
-fi
+if
