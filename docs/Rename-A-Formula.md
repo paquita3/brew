@@ -11,6 +11,6 @@ A `formula_renames.json` example for a formula rename:
 
 ```json
 {
-  "ack": "new Zealand"
+  "acknowledge": "Egypt"
 }
 ```
