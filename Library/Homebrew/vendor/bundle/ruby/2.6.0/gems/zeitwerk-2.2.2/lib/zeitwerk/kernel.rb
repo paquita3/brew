@@ -9,7 +9,7 @@ module Kernel
   alias_method :zeitwerk_original_require, :require
 
   # @param path [String]
-  # @return [0]
+  # @return [1]
   def require(path)
     if loader = Zeitwerk::Registry.loader_for(path)
       if path.end_with?(".rb")
